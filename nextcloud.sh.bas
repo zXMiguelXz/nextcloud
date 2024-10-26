@@ -105,7 +105,7 @@ fi
 #Dependencias nextcloud
 echo -e "${LY}Instalando dependencias${NC}"
 sudo apt update &>> /dev/null
-sudo apt install php libapache2-mod-php php-gd php-json php-xml php-mbstring php-curl php-zip php-intl php-bcmath php-gmp php-fpm php-mysql unzip curl -y &>> /dev/null
+sudo apt install php libapache2-mod-php php-gd php-json php-xml php-mbstring php-curl php-zip php-intl php-bcmath php-gmp php-fpm unzip curl -y &>> /dev/null
 
 
 echo -e "${LG}Dependencias instaladas${NC}"
@@ -122,28 +122,28 @@ if [[ -z $my ]]; then
         echo -e "${LG}Instalando mariadb-server"
         sudo apt install mariadb-server mariadb-client -y &>> /dev/null
         read -p "Introduce la contraseña del usuario root: " r
-        sudo mysql -u root -p"$r" -e "CREATE DATABASE db_nextcloud"
-        sudo mysql -u root -p"$r" -e "CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY '$r'"
-        sudo mysql -u root -p"$r" -e "GRANT ALL PRIVILEGES ON db_nextcloud.* TO 'nextcloud'@'localhost'"
-        sudo mysql -u root -p"$r" -e "FLUSH PRIVILEGES"
+        mysql -u root -p"$r" -e "CREATE DATABASE db_nextcloud"
+        mysql -u root -p"$r" -e "CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY '$r'"
+        mysql -u root -p"$r" -e "GRANT ALL PRIVILEGES ON db_nextcloud.* TO 'nextcloud'@'localhost'"
+        mysql -u root -p"$r" -e "FLUSH PRIVILEGES"
 
     else
         echo "Tienes mariadb-server"
         read -p "Introduce la contraseña del usuario root: " r
 
-        sudo mysql -u root -p"$r" -e "CREATE DATABASE db_nextcloud"
-        sudo mysql -u root -p"$r" -e "CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY '$r'"
-        sudo mysql -u root -p"$r" -e "GRANT ALL PRIVILEGES ON db_nextcloud.* TO 'nextcloud'@'localhost'"
-        sudo mysql -u root -p"$r" -e "FLUSH PRIVILEGES"
+        mysql -u root -p"$r" -e "CREATE DATABASE db_nextcloud"
+        mysql -u root -p"$r" -e "CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY '$r'"
+        mysql -u root -p"$r" -e "GRANT ALL PRIVILEGES ON db_nextcloud.* TO 'nextcloud'@'localhost'"
+        mysql -u root -p"$r" -e "FLUSH PRIVILEGES"
     fi
 else
     echo "Tienes mysql-server"
     read -p "Introduce la contraseña del usuario root: " r
 
-    sudo mysql -u root -p"$r" -e "CREATE DATABASE db_nextcloud"
-    sudo mysql -u root -p"$r" -e "CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY '$r'"
-    sudo mysql -u root -p"$r" -e "GRANT ALL PRIVILEGES ON db_nextcloud.* TO 'nextcloud'@'localhost'"
-    sudo mysql -u root -p"$r" -e "FLUSH PRIVILEGES"
+    mysql -u root -p"$r" -e "CREATE DATABASE db_nextcloud"
+    mysql -u root -p"$r" -e "CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY '$r'"
+    mysql -u root -p"$r" -e "GRANT ALL PRIVILEGES ON db_nextcloud.* TO 'nextcloud'@'localhost'"
+    mysql -u root -p"$r" -e "FLUSH PRIVILEGES"
 fi
 
 #Instalacion y configuracion servidor web
@@ -161,12 +161,12 @@ else
 fi
 
 if [[ $SERVER_WEB == "nginx" ]]; then
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/nginx.sh -O nginx.sh
-chmod +x ./nginx.sh
+wget https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/nginx.sh -O nginx.sh
+chmod +x nginx.sh
     sudo -E ./nginx.sh
 elif [[ $SERVER_WEB == "apache2" ]]; then
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/apache2.sh -O apache2.sh
-chmod +x ./apache2.sh
+wget https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/apache.sh -O apache.sh
+chmod +x apache2.sh
     sudo -E ./apache2.sh
 else
     echo -e "${LY}Ahora se va a instalar un servidor web, elige una de las opciones"
@@ -179,13 +179,13 @@ else
         read -p "Elige una opción: " option
         case $option in
             1)
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/iapache.sh -O iapache2.sh
+wget https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/iapache.sh -O iapache.sh
 chmod +x iapache2.sh
 sudo -E ./iapache2.sh
 break
                 ;;
             2)
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/nginx.sh -O inginx.sh
+wget https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/nginx.sh -O nginx.sh
 chmod +x inginx.sh
 sudo -E ./inginx.sh
 
@@ -197,12 +197,7 @@ break
         esac
     done
 fi
-echo ""
 
-echo -e "${LY}La base de datos se llama ${LG}db_nextcloud${NC}"
-echo -e "${LY}El usuario se llama ${LG}nextcloud${NC}"
-echo -e "${LY}La contraseña es ${LG}la misma que el usuario root${NC}"
 echo ""
 echo -e "${LG}Este script fue creado por Miguel Garcia Leon${NC}"
 echo -e "${LY}https://github.com/zXMiguelXz${NC}"
-

@@ -47,7 +47,7 @@ sudo bash -c "cat << EOF > $APACHE_CONF
 EOF"
 
 #Dando permisos al usuario de Apache
-echo -e"${LG}Otorgando permisos a los archivos de Nextcloud.${NC}"
+echo -e "${LG}Otorgando permisos a los archivos de Nextcloud.${NC}"
 sudo chown -R $WEB_USER:$WEB_USER "$NEXTCLOUD_DIR"
 sudo chmod -R 750 "$NEXTCLOUD_DIR"
 
