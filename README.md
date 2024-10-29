@@ -1,4 +1,4 @@
-##INSTALACION AUTOMATIZADA DE NEXTCLOUD
+#INSTALACION AUTOMATIZADA DE NEXTCLOUD
 
 ```
 wget https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/nextcloud.sh  && chmod +x nextcloud.sh && bash nextcloud.sh
