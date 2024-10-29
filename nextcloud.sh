@@ -23,7 +23,7 @@ comprobar_sudo=$(dpkg -l | grep sudo)
 if
 [[ $comprobar_sudo == "" ]];then
 
-echo -e "${LR}Instalasudo."
+echo -e "${LR}Instala sudo."
 echo -e ${NC}
 exit 1
 else
@@ -52,7 +52,6 @@ fi
 
 #Creacion de entorno de trabajo
 HOME=$(eval echo ~)
-rm -R $HOME/next_setup/
 mkdir $HOME/next_setup
 DOWNLOAD=$HOME/next_setup
 
@@ -146,59 +145,38 @@ else
     sudo mysql -u root -p"$r" -e "FLUSH PRIVILEGES"
 fi
 
-#Instalacion y configuracion servidor web
-ca=$(dpkg -l | grep "^ii.*apache2")
+#Comprobacion de que no este nginx instalado
 cn=$(dpkg -l | grep "^ii.*nginx")
 
-if [[ $ca == "" ]]; then
-    if [[ $cn == "" ]]; then
-        SERVER_WEB="nada"
-    else
-        SERVER_WEB="nginx"
-    fi
+if [[ $cn = "" ]];then
+echo -e "${LY}Se ha comprobado que no tienes nginx${NC}"
 else
-    SERVER_WEB="apache2"
+echo -e "${LR}Tienes nginx instalado, este script funciona con el servidor web Apache2${NC}"
+exit 1
 fi
 
-if [[ $SERVER_WEB == "nginx" ]]; then
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/nginx.sh -O nginx.sh
-chmod +x ./nginx.sh
-    sudo -E ./nginx.sh
-elif [[ $SERVER_WEB == "apache2" ]]; then
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/apache2.sh -O apache2.sh
-chmod +x ./apache2.sh
-    sudo -E ./apache2.sh
-else
-    echo -e "${LY}Ahora se va a instalar un servidor web, elige una de las opciones"
-    sleep 4
+#Instalacion y configuracion servidor web
+ca=$(dpkg -l | grep "^ii.*apache2")
 
-    while true; do
-        echo "Elige una opción:"
-        echo "1) Instalar Apache2"
-        echo "2) Instalar Nginx"
-        read -p "Elige una opción: " option
-        case $option in
-            1)
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/iapache.sh -O iapache2.sh
+if [[ $ca == "" ]]; then
+echo -e "${LY}Se va a proceder a la instalacion de apache2${NC}"
+wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/iapache2.sh -O iapache2.sh
 chmod +x iapache2.sh
 sudo -E ./iapache2.sh
-break
-                ;;
-            2)
-wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/nginx.sh -O inginx.sh
-chmod +x inginx.sh
-sudo -E ./inginx.sh
-
-break
- ;;
-            *)
-                echo "Opción inválida, por favor intenta de nuevo."
-                ;;
-        esac
-    done
+else
+echo -e "${LY}Se va a proceder a configurar apache2, este script deshabilitara el 000-default para que nextcloud este funcionando en el puerto 80${LY}"
+sleep 4
+wget -q --show-progress https://raw.githubusercontent.com/zXMiguelXz/nextcloud/refs/heads/main/apache2.sh -O apache2.sh
+chmod +x ./apache2.sh
+sudo -E ./apache2.sh
 fi
-echo ""
 
+echo -e "${LG}Eliminando el directorio de trabajo.${NC}"
+rm -R $HOME/next_setup/
+sleep 2
+echo ""
+echo -e "${LG}Configuración completada. Ahora puedes acceder a Nextcloud en http://localhost.${NC}"
+echo ""
 echo -e "${LY}La base de datos se llama ${LG}db_nextcloud${NC}"
 echo -e "${LY}El usuario se llama ${LG}nextcloud${NC}"
 echo -e "${LY}La contraseña es ${LG}la misma que el usuario root${NC}"

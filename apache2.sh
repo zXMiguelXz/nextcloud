@@ -52,6 +52,5 @@ sudo a2ensite nextcloud.conf
 echo -e "${LY}Reiniciando Apache para aplicar cambios.${NC}"
 sudo systemctl restart apache2
 
-echo -e "${LG}Configuración completada. Ahora puedes acceder a Nextcloud en http://localhost.${NC}"
 
 
